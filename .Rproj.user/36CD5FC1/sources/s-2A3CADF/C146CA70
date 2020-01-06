@@ -7,11 +7,13 @@
     "folds" : "",
     "hash" : "369326322",
     "id" : "C146CA70",
-    "lastKnownWriteTime" : 1563289244,
-    "last_content_update" : 1563289244,
+    "lastKnownWriteTime" : 1578277346,
+    "last_content_update" : 1578277346269,
     "path" : "~/Dropbox/Documents/RDev/textbooksPrePostChavez/.gitignore",
     "project_path" : ".gitignore",
     "properties" : {
+        "cursorPosition" : "4,0",
+        "scrollLine" : "0"
     },
     "relative_order" : 8,
     "source_on_save" : false,
