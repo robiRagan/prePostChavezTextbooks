@@ -1,0 +1,47 @@
+TO DO:
+
+07.18.19:
+
+Notes from call with antonio:
+
+1) Things to Check:
+
+# Proportions for the Lemma was wrong.
+
+	[DONE] Should be ok after I refactor the code.
+
+# Check to make sure Keywords are working the right way
+
+	[DONE] Also should be ok after I refactor the code.
+
+# Stems may not be gathering the terms enough.
+
+	[DONE] We may have to do some custome Steming or Custom Lemmaing.
+
+# Is there a way to make the scales all the same on the keyword changes graahs?
+
+  [DONE] I have done this but we may not want to.
+
+# Is there a way to color the Keyword Changes graph by the Keyword Categories or rearrange them?
+
+  [DONE] The categories are not disjoint sets. Some keywords (like "trabajo"") appear in two different categories.
+    So there is no clear way to color each of the sub-graphs by category.
+
+# Reduce the "signature graph" for keywords to the top 10.
+
+  [DONE] This has been Done
+
+2) Graphs to Include:
+
+- Proportion Graph for all Lemmas
+
+- Keyword Changes Graphs
+
+- Both of the "Signature Graphs"
+
+
+3) What I need to Write:
+
+Literature Review for Techniques
+
+Description of how the graphs were created from gathering the text to the graph.

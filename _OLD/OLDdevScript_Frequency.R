@@ -1,0 +1,312 @@
+################################################################
+# devScript_Frequency.R
+#
+# A script to do frequency analysis
+################################################################
+
+
+rm(list = ls(all = TRUE)) # Clear the workspace
+
+# options(scipen=999) # Turns off scientific notation
+
+
+#################
+# Packages
+#################
+# install.packages("textbooksPrePostChavez")
+
+ library(textbooksPrePostChavez)
+
+
+#####################################
+### Read in the Tokenized Data   ###
+### Tokenized Data was created   ###
+### with the "Cleaning" Script   ###
+###################################
+
+columnTypes <- cols(
+  document = col_character(),
+  pageGroup = col_double(),
+  line = col_double(),
+  word = col_character(),
+  setName = col_character()
+)
+
+preChavezPdfTokens <- read_csv(file = "tokenizedText/tokenizedPreChavez.csv", col_types = columnTypes)
+postChavezPdfTokens <- read_csv(file = "tokenizedText/tokenizedPostChavez.csv", col_types = columnTypes)
+
+
+
+####################################################################
+### Construct the Keyword List
+### Note: To edit the list edit the file: "R/constructKeywordList.R"
+#####################################################################
+
+keywordMasterList <- constructKeywordList()
+
+
+
+
+#####################################
+###     Remove Stop Words       ###
+###################################
+
+# We need to remove uninformative words.
+# # In text analysis these are often called "stop words"
+# # First I extract a spanish "stop word" set from the {quanteda} package.
+spanish_stop_words <- tibble(word = stopwords("spanish"), lexicon = "fromQuanteda")
+
+
+#Now remove all of the stop words from each of the token sets
+preChavezPdfTokens <- anti_join(preChavezPdfTokens, spanish_stop_words)
+postChavezPdfTokens <- anti_join(postChavezPdfTokens, spanish_stop_words)
+
+# #Remove all lines of underscores
+preChavezPdfTokens <- preChavezPdfTokens[-grep("_+", preChavezPdfTokens$word),]
+postChavezPdfTokens <- postChavezPdfTokens[-grep("_+", postChavezPdfTokens$word),]
+
+
+# Remove Whitespace
+preChavezPdfTokens$word <- gsub("\\s+","",preChavezPdfTokens$word)
+postChavezPdfTokens$word <- gsub("\\s+","",postChavezPdfTokens$word)
+
+
+# Remove numeric digits
+preChavezPdfTokens <- preChavezPdfTokens[-grep("\\b\\d+\\b", preChavezPdfTokens$word),]
+postChavezPdfTokens <- postChavezPdfTokens[-grep("\\b\\d+\\b", postChavezPdfTokens$word),]
+
+# #Remove all words that have any  digits in them
+preChavezPdfTokens <- filter(preChavezPdfTokens, !str_detect(string = preChavezPdfTokens$word, pattern = "\\d") )
+postChavezPdfTokens <- filter(postChavezPdfTokens, !str_detect(string = postChavezPdfTokens$word, pattern = "\\d") )
+
+# #Remove all words that have a dot in them
+preChavezPdfTokens <- filter(preChavezPdfTokens, !str_detect(string = preChavezPdfTokens$word, pattern = "\\.") )
+postChavezPdfTokens <- filter(postChavezPdfTokens, !str_detect(string = postChavezPdfTokens$word, pattern = "\\.") )
+
+
+#Remove all words less than the number of letters in the shortest keyword file
+shortestKeyword <- min( str_count(keywordMasterList$word) )
+preChavezPdfTokens <- filter(preChavezPdfTokens, str_count(preChavezPdfTokens$word)>shortestKeyword )
+postChavezPdfTokens <- filter(postChavezPdfTokens, str_count(postChavezPdfTokens$word)>shortestKeyword )
+
+# Correct the encoding from apostrophe symbol ’ to apostrophe symbol ' in the Post Chavez tokens
+postChavezPdfTokens$word <- str_replace_all(string = postChavezPdfTokens$word, pattern = "’", replacement = "'")
+
+
+##########################################################################
+##########################################################################
+# Steming the words and Keywords ###
+# See: https://abndistro.com/post/2019/02/10/tidy-text-mining-in-r/
+##########################################################################
+##########################################################################
+
+
+preChavezPdfTokens <- mutate(preChavezPdfTokens, theWordStem = SnowballC::wordStem(word, language = "spanish"))
+
+postChavezPdfTokens <- mutate(postChavezPdfTokens, theWordStem = SnowballC::wordStem(word, language = "spanish"))
+
+stemKeywordMasterList <- mutate(keywordMasterList, theWordStem = SnowballC::wordStem(word, language = "spanish"))
+
+
+
+##########################################################################
+##########################################################################
+# Lemmatization of the words and Keywords ###
+# See: http://www.bernhardlearns.com/2017/04/cleaning-words-with-r-stemming.html
+##########################################################################
+##########################################################################
+
+# To create lemmas I use a simple approach. For a given Stem I find the most common base word across both pre-chavez, post-chavez and the keywords
+
+# Select only the word and theWordStem variables from each dataframe
+preChavezPdfWordsAndStemsOnly <- select(preChavezPdfTokens, word, theWordStem)
+postChavezPdfWordsAndStemsOnly <- select(postChavezPdfTokens, word, theWordStem)
+stemKeywordWordsAndStemsOnly <- select(stemKeywordMasterList, word, theWordStem)
+
+# Combine the words and tehWordStem from all three dataframes
+AllTokensAndKeywords <- rbind(preChavezPdfWordsAndStemsOnly, postChavezPdfWordsAndStemsOnly, stemKeywordWordsAndStemsOnly)
+
+# Group the dataframe by the stems
+AllTokensAndKeywords <- group_by(AllTokensAndKeywords, theWordStem)
+
+# For each theWordStem select the word that is the most common
+AllTokensAndKeywordsLemmas <- summarize(AllTokensAndKeywords, lemma = names(which.max(table(word))))
+
+# Now create a lemma variable in each of the original 3 data frames based on theWordStem
+preChavezPdfTokens <- inner_join(x = preChavezPdfTokens, y = AllTokensAndKeywordsLemmas)
+postChavezPdfTokens <- inner_join(x = postChavezPdfTokens, y = AllTokensAndKeywordsLemmas)
+stemKeywordMasterList <- inner_join(x = stemKeywordMasterList, y = AllTokensAndKeywordsLemmas)
+
+
+
+# clean up global environment
+remove(columnTypes, shortestKeyword, spanish_stop_words, AllTokensAndKeywords, AllTokensAndKeywordsLemmas, preChavezPdfWordsAndStemsOnly, postChavezPdfWordsAndStemsOnly, stemKeywordWordsAndStemsOnly)
+
+
+#####################################
+## ALL WORD and ALL STEM FREQUENCY ##
+####################################
+
+# Construct a word count, stem word count and lemma count for the two sets of PDFs
+preChavezWordFrequency <- count(x = preChavezPdfTokens, word, sort = TRUE)
+postChavezWordFrequency <- count(x = postChavezPdfTokens, word, sort = TRUE)
+
+preChavezStemWordFrequency <- count(x = preChavezPdfTokens, theWordStem, sort = TRUE)
+postChavezStemWordFrequency <- count(x = postChavezPdfTokens, theWordStem, sort = TRUE)
+
+preChavezLemmaFrequency <- count(x = preChavezPdfTokens, lemma, sort = TRUE)
+postChavezLemmaFrequency <- count(x = postChavezPdfTokens, lemma, sort = TRUE)
+
+
+# We can construct a chart that displays all of the words that appear more than X number of times.
+# Set the threshold for a word to appear in the chart.
+# # Here I am charting all words whose count is in the 99th percentile
+
+# Set the threshold or topXWords
+
+# countThresholdForChart <- 20
+topXNumberOfWordsForChart <- 20
+
+# Words #
+
+preChavezAllWordsFreq <- plotFreqOfWordsFromCount(countData = preChavezWordFrequency, topXNumberOfWords = topXNumberOfWordsForChart) + ggtitle( paste("Frequency of Top", topXNumberOfWordsForChart, "Words in Pre-Chavez Textbooks After Cleaning", sep=" ") )
+ggsave( paste("images/top",topXNumberOfWordsForChart,"WordsPreChavez.pdf", sep=""), width = 20, height = 20, units = "cm" )
+ggsave( paste("images/top",topXNumberOfWordsForChart,"WordsPreChavez.png", sep=""), width = 20, height = 20, units = "cm" )
+preChavezAllWordsFreq
+
+postChavezAllWordsFreq <- plotFreqOfWordsFromCount(countData = postChavezWordFrequency, topXNumberOfWords = topXNumberOfWordsForChart) + ggtitle( paste("Frequency of Top", topXNumberOfWordsForChart, "Words in Post-Chavez Textbooks After Cleaning", sep=" ") )
+ggsave( paste("images/top",topXNumberOfWordsForChart,"WordsPostChavez.pdf", sep=""), width = 20, height = 20, units = "cm" )
+ggsave( paste("images/top",topXNumberOfWordsForChart,"WordsPostChavez.png", sep=""), width = 20, height = 20, units = "cm" )
+postChavezAllWordsFreq
+
+# Stems #
+
+preChavezAllStemsFreq <- plotFreqOfWordsFromCount(countData = preChavezStemWordFrequency, topXNumberOfWords = topXNumberOfWordsForChart) + ggtitle( paste("Frequency of Top", topXNumberOfWordsForChart, "Word Stems in Pre-Chavez Textbooks After Cleaning", sep=" ") )
+ggsave( paste("images/top",topXNumberOfWordsForChart,"WordStemsPreChavez.pdf", sep=""), width = 20, height = 20, units = "cm" )
+ggsave( paste("images/top",topXNumberOfWordsForChart,"WordStemsPreChavez.png", sep=""), width = 20, height = 20, units = "cm" )
+preChavezAllStemsFreq
+
+postChavezAllStemsFreq <- plotFreqOfWordsFromCount(countData = postChavezStemWordFrequency, topXNumberOfWords = topXNumberOfWordsForChart) + ggtitle( paste("Frequency of Top", topXNumberOfWordsForChart, "Word Stems in Post-Chavez Textbooks After Cleaning", sep=" ") )
+ggsave( paste("images/top",topXNumberOfWordsForChart,"WordStemsPostChavez.pdf", sep=""), width = 20, height = 20, units = "cm" )
+ggsave( paste("images/top",topXNumberOfWordsForChart,"WordStemsPostChavez.png", sep=""), width = 20, height = 20, units = "cm" )
+postChavezAllStemsFreq
+
+
+# Lemmas #
+
+preChavezAllLemmaFreq <- plotFreqOfWordsFromCount(countData = preChavezLemmaFrequency, topXNumberOfWords = topXNumberOfWordsForChart) + ggtitle( paste("Frequency of Top", topXNumberOfWordsForChart, "Lemmas in Pre-Chavez Textbooks After Cleaning", sep=" ") )
+ggsave( paste("images/top",topXNumberOfWordsForChart,"LemmasPreChavez.pdf", sep=""), width = 20, height = 20, units = "cm" )
+ggsave( paste("images/top",topXNumberOfWordsForChart,"LemmasPreChavez.png", sep=""), width = 20, height = 20, units = "cm" )
+preChavezAllLemmaFreq
+
+postChavezAllLemmaFreq <- plotFreqOfWordsFromCount(countData = postChavezLemmaFrequency, topXNumberOfWords = topXNumberOfWordsForChart) + ggtitle( paste("Frequency of Top", topXNumberOfWordsForChart, "Lemmas in Post-Chavez Textbooks After Cleaning", sep=" ") )
+ggsave( paste("images/top",topXNumberOfWordsForChart,"LemmasPostChavez.pdf", sep=""), width = 20, height = 20, units = "cm" )
+ggsave( paste("images/top",topXNumberOfWordsForChart,"LemmasPostChavez.png", sep=""), width = 20, height = 20, units = "cm" )
+postChavezAllLemmaFreq
+
+
+##########################################################################
+##########################################################################
+#               EXPLORE TEXT USING KEYWORDS                     ###
+##########################################################################
+##########################################################################
+
+# Now remove all words not on the master list of keywords
+
+preChavezPdfTokensMasterKey <- filter(preChavezPdfTokens, word %in% keywordMasterList$word)
+postChavezPdfTokensMasterKey <- filter(postChavezPdfTokens, word %in% keywordMasterList$word)
+
+# Construct a word count for the two sets of PDFs
+preChavezWordFrequencyMasterKey <- count(x = preChavezPdfTokensMasterKey, word, sort = TRUE)
+postChavezWordFrequencyMasterKey <- count(x = postChavezPdfTokensMasterKey, word, sort = TRUE)
+
+
+
+# Now remove all words not on the master list of stemed keywords
+
+preChavezPdfTokensMasterKeyStems <- filter(preChavezPdfTokens, theWordStem %in% stemKeywordMasterList$theWordStem)
+postChavezPdfTokensMasterKeyStems <- filter(postChavezPdfTokens, theWordStem %in% stemKeywordMasterList$theWordStem)
+
+# Construct a stem word count for the two sets of PDFs
+preChavezFrequencyMasterKeyStems <- count(x = preChavezPdfTokensMasterKeyStems, theWordStem, sort = TRUE)
+postChavezFrequencyMasterKeyStems <- count(x = postChavezPdfTokensMasterKeyStems, theWordStem, sort = TRUE)
+
+
+# Now remove all words not on the master list of stemed keywords
+
+preChavezPdfTokensMasterKeyLemmas <- filter(preChavezPdfTokens, lemma %in% stemKeywordMasterList$lemma)
+postChavezPdfTokensMasterKeyLemmas <- filter(postChavezPdfTokens, lemma %in% stemKeywordMasterList$lemma)
+
+# Construct a stem word count for the two sets of PDFs
+preChavezFrequencyMasterKeyLemmas <- count(x = preChavezPdfTokensMasterKeyLemmas, lemma, sort = TRUE)
+postChavezFrequencyMasterKeyLemmas <- count(x = postChavezPdfTokensMasterKeyLemmas, lemma, sort = TRUE)
+
+
+
+# We can construct a chart that displays all of the words that appear more than X number of times.
+# Set the threshold for a word to appear in the chart.
+# # Here I am charting all words whose count is in the 99th percentile
+
+# Set the threshold
+# countThresholdForChart2 <- 1
+
+# topXNumberOfWordsForChart2 <- min(length(preChavezWordFrequencyMasterKey$word), length(postChavezWordFrequencyMasterKey$word), length(preChavezStemFrequencyMasterKey$theWordStem), length(postChavezStemFrequencyMasterKey$theWordStem) )
+
+topXNumberOfWordsForChart2 <- 20
+
+
+### Full Keywords ####
+preChavezKeyFreq <- plotFreqOfWordsFromCount(countData = preChavezWordFrequencyMasterKey, topXNumberOfWords = topXNumberOfWordsForChart2) + ggtitle( paste("Frequency of the Top", topXNumberOfWordsForChart2, "Keywords in Pre-Chavez Textbooks", sep=" ") )
+ggsave( paste("images/top",topXNumberOfWordsForChart2,"KeywordsPreChavez.pdf", sep=""), width = 20, height = 20, units = "cm" )
+ggsave( paste("images/top",topXNumberOfWordsForChart2,"KeywordsPreChavez.png", sep=""), width = 20, height = 20, units = "cm" )
+preChavezKeyFreq
+
+postChavezKeyFreq <- plotFreqOfWordsFromCount(countData = postChavezWordFrequencyMasterKey, topXNumberOfWords = topXNumberOfWordsForChart2) + ggtitle( paste("Frequency of the Top", topXNumberOfWordsForChart2, "Keywords in Post-Chavez Textbooks", sep=" ") )
+ggsave( paste("images/top",topXNumberOfWordsForChart2,"KeywordsPostChavez.pdf", sep=""), width = 20, height = 20, units = "cm" )
+ggsave( paste("images/top",topXNumberOfWordsForChart2,"KeywordsPostChavez.png", sep=""), width = 20, height = 20, units = "cm" )
+postChavezKeyFreq
+
+
+
+###  Keyword Stems ####
+preChavezKeyStemFreq <- plotFreqOfWordsFromCount(countData = preChavezFrequencyMasterKeyStems, topXNumberOfWords = topXNumberOfWordsForChart2) + ggtitle( paste("Frequency of the Top", topXNumberOfWordsForChart2, "Keyword Stems in Pre-Chavez Textbooks", sep=" ") )
+ggsave( paste("images/top",topXNumberOfWordsForChart2,"KeywordStemsPreChavez.pdf", sep=""), width = 20, height = 20, units = "cm" )
+ggsave( paste("images/top",topXNumberOfWordsForChart2,"KeywordStemsPreChavez.png", sep=""), width = 20, height = 20, units = "cm" )
+preChavezKeyStemFreq
+
+
+postChavezKeyStemFreq <- plotFreqOfWordsFromCount(countData = postChavezFrequencyMasterKeyStems, topXNumberOfWords = topXNumberOfWordsForChart2) + ggtitle( paste("Frequency of the Top", topXNumberOfWordsForChart2, "Keyword Stems in Post-Chavez Textbooks", sep=" ") )
+ggsave( paste("images/top",topXNumberOfWordsForChart2,"KeywordStemsPostChavez.pdf", sep=""), width = 20, height = 20, units = "cm" )
+ggsave( paste("images/top",topXNumberOfWordsForChart2,"KeywordStemsPostChavez.png", sep=""), width = 20, height = 20, units = "cm" )
+postChavezKeyStemFreq
+
+
+###  Lemmas ####
+preChavezKeyLemmaFreq <- plotFreqOfWordsFromCount(countData = preChavezFrequencyMasterKeyLemmas, topXNumberOfWords = topXNumberOfWordsForChart2) + ggtitle( paste("Frequency of the Top", topXNumberOfWordsForChart2, "Keyword Lemmas in Pre-Chavez Textbooks", sep=" ") )
+ggsave( paste("images/top",topXNumberOfWordsForChart2,"KeywordLemmasPreChavez.pdf", sep=""), width = 20, height = 20, units = "cm" )
+ggsave( paste("images/top",topXNumberOfWordsForChart2,"KeywordLemmasPreChavez.png", sep=""), width = 20, height = 20, units = "cm" )
+preChavezKeyLemmaFreq
+
+
+postChavezKeyLemmaFreq <- plotFreqOfWordsFromCount(countData = postChavezFrequencyMasterKeyLemmas, topXNumberOfWords = topXNumberOfWordsForChart2) + ggtitle( paste("Frequency of the Top", topXNumberOfWordsForChart2, "Keyword Lemmas in Post-Chavez Textbooks", sep=" ") )
+ggsave( paste("images/top",topXNumberOfWordsForChart2,"KeywordLemmasPostChavez.pdf", sep=""), width = 20, height = 20, units = "cm" )
+ggsave( paste("images/top",topXNumberOfWordsForChart2,"KeywordLemmasPostChavez.png", sep=""), width = 20, height = 20, units = "cm" )
+postChavezKeyLemmaFreq
+
+
+
+
+###############################################
+## Keywords by Category ####
+###############################################
+
+
+forCategory(preChavezPdfTokensIn = preChavezPdfTokens, postChavezPdfTokensIn = postChavezPdfTokens, theKeywordMasterList = keywordMasterList, theCategory = "surplus value", findFrequency = TRUE, findCorr = FALSE, saveGraphs = TRUE)
+
+forCategory(preChavezPdfTokensIn = preChavezPdfTokens, postChavezPdfTokensIn = postChavezPdfTokens, theKeywordMasterList = keywordMasterList, theCategory = "labor theory of value", findFrequency = TRUE, findCorr = FALSE, saveGraphs = TRUE)
+
+forCategory(preChavezPdfTokensIn = preChavezPdfTokens, postChavezPdfTokensIn = postChavezPdfTokens, theKeywordMasterList = keywordMasterList, theCategory = "subjective theory of value", findFrequency = TRUE, findCorr = FALSE, saveGraphs = TRUE)
+
+forCategory(preChavezPdfTokensIn = preChavezPdfTokens, postChavezPdfTokensIn = postChavezPdfTokens, theKeywordMasterList = keywordMasterList, theCategory = "income or wealth redistribution",findFrequency = TRUE, findCorr = FALSE, saveGraphs = TRUE)
+
+forCategory(preChavezPdfTokensIn = preChavezPdfTokens, postChavezPdfTokensIn = postChavezPdfTokens, theKeywordMasterList = keywordMasterList, theCategory = "public goods", findFrequency = TRUE, findCorr = FALSE, saveGraphs = TRUE)

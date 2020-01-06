@@ -1,0 +1,25 @@
+Package: textbooksPrePostChavez
+Type: Package
+Title: A package to accompany Saravia and Ragan's analysis of Pre and Post Chavez Textbooks
+Version: 0.1.0
+Author: Robi Ragan
+Maintainer: <robi.ragan@gmail.com>
+Description: A package to accompany Saravia and Ragan's analysis of Pre and Post Chavez Textbooks
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Depends:
+  tidyverse,
+  tidytext,
+  pdftools,
+  quanteda,
+  scales,
+  gginnards,
+  SnowballC,
+  textstem,
+  widyr,
+  igraph,
+  ggraph,
+  text2vec,
+  glue
+RoxygenNote: 6.1.1

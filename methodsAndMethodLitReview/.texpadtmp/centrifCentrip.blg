@@ -1,0 +1,46 @@
+This is BibTeX, Version 0.99d (TeX Live 2017)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: /Users/ragan_ra/Dropbox/Documents/WorkingPapers/centripCentrifMultiDim/currentVersion/.texpadtmp/centrifCentrip.aux
+The style file: apsr.bst
+Database file #1: ../bib.bib.bib
+You've used 31 entries,
+            2874 wiz_defined-function locations,
+            846 strings with 9491 characters,
+and the built_in function-call counts, 90317 in all, are:
+= -- 14477
+> -- 922
+< -- 0
++ -- 6436
+- -- 351
+* -- 7344
+:= -- 18680
+add.period$ -- 125
+call.type$ -- 31
+change.case$ -- 404
+chr.to.int$ -- 31
+cite$ -- 31
+duplicate$ -- 500
+empty$ -- 1069
+format.name$ -- 393
+if$ -- 16181
+int.to.chr$ -- 5
+int.to.str$ -- 0
+missing$ -- 35
+newline$ -- 135
+num.names$ -- 334
+pop$ -- 132
+preamble$ -- 1
+purify$ -- 465
+quote$ -- 0
+skip$ -- 432
+stack$ -- 0
+substring$ -- 20024
+swap$ -- 90
+text.length$ -- 434
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 114
+warning$ -- 0
+while$ -- 721
+width$ -- 0
+write$ -- 420
