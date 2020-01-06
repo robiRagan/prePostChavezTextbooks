@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1565878346213.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3863546188",
+    "id" : "CA57890",
+    "lastKnownWriteTime" : 1563475711,
+    "last_content_update" : 1563475711,
+    "path" : "~/Dropbox/Documents/RDev/textbooksPrePostChavez/cleaning1_ReadTokenizeStore.R",
+    "project_path" : "cleaning1_ReadTokenizeStore.R",
+    "properties" : {
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

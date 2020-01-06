@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1565621545959.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3269284213",
+    "id" : "20969EDD",
+    "lastKnownWriteTime" : 1567176933,
+    "last_content_update" : 1567176933269,
+    "path" : "~/Dropbox/Documents/RDev/textbooksPrePostChavez/regenerateAllGraphs.R",
+    "project_path" : "regenerateAllGraphs.R",
+    "properties" : {
+        "cursorPosition" : "35,0",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

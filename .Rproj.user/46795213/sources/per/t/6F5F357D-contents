@@ -1,0 +1,26 @@
+################################################################
+# regenerateAllGraphs.R
+#
+# A script to do frequency analysis
+################################################################
+
+
+rm(list = ls(all = TRUE)) # Clear the workspace
+
+# options(scipen=999) # Turns off scientific notation
+
+
+#################
+# Packages
+#################
+# install.packages("textbooksPrePostChavez")
+
+ library(textbooksPrePostChavez)
+
+
+source("cleaning1_ReadTokenizeStore.R")
+source("cleaning2_FreqPropStore.R")
+source("analysis1_Frequency.R")
+source("analysis2_Proportions.R")
+source("analysis3_KeywordChanges.R")
+source("analysis4_TFIDF.R")

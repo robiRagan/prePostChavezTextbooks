@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1578266046128.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2688276300",
+    "id" : "40681EE2",
+    "lastKnownWriteTime" : 1563294490,
+    "last_content_update" : 1563294490,
+    "path" : "~/Dropbox/Documents/RDev/textbooksPrePostChavez/R/readPdfTokenizeAndStore.R",
+    "project_path" : "R/readPdfTokenizeAndStore.R",
+    "properties" : {
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

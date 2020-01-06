@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1565878351765.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2710384435",
+    "id" : "918CB8A3",
+    "lastKnownWriteTime" : 1563552609,
+    "last_content_update" : 1563552609,
+    "path" : "~/Dropbox/Documents/RDev/textbooksPrePostChavez/analysis4_TFIDF.R",
+    "project_path" : "analysis4_TFIDF.R",
+    "properties" : {
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

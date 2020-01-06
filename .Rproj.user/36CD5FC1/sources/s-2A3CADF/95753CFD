@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1578262127653.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "436392137",
+    "id" : "95753CFD",
+    "lastKnownWriteTime" : 1563822463,
+    "last_content_update" : 1563822463,
+    "path" : "~/Dropbox/Documents/RDev/textbooksPrePostChavez/analysis1_Frequency.R",
+    "project_path" : "analysis1_Frequency.R",
+    "properties" : {
+        "cursorPosition" : "139,0",
+        "scrollLine" : "3"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
