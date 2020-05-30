@@ -86,8 +86,8 @@ nCols2 <- 4
 # #####
 # # Diagnostics
 #
-filter(preChavezPdfTokens, lemma=="mercados")
-filter(postChavezPdfTokens, lemma=="mercados")
+# filter(preChavezPdfTokens, lemma=="mercados")
+# filter(postChavezPdfTokens, lemma=="mercados")
 
 
 

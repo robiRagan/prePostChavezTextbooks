@@ -35,12 +35,13 @@ keywordMasterList <- read_csv(file = "tokenizedText/keywordMasterListTable.csv")
 ########################################
 # Graphing Parameters
 #####################################
-graphW <- 40
 
-graphH <- 30
 
 topXNumberOfWordsForChart <- 10
 
+graphW <- 1.5*topXNumberOfWordsForChart
+
+graphH <- topXNumberOfWordsForChart
 
 
 #####################################
@@ -65,20 +66,20 @@ postChavezLemmaProportion <- getProp(tokenTable = postChavezPdfTokens, whichProp
 # Set the threshold or topXWords
 
 
-# Words #
-
-AllWordsProp <- plotPrePostProp(preChavezTokenProp = preChavezWordProportion, postChavezTokenProp = postChavezWordProportion, WordsORStemsORLemmas = "Words", isKeywords = FALSE, topNWords = topXNumberOfWordsForChart)
-ggsave( paste("images/top",topXNumberOfWordsForChart,"AllWordsProp.pdf", sep=""), width = graphW, height = graphH, units = "cm" )
-ggsave( paste("images/top",topXNumberOfWordsForChart,"AllWordsProp.png", sep=""), width = graphW, height = graphH, units = "cm" )
-AllWordsProp
-
-# Stems #
-
-
-AllStemsProp <- plotPrePostProp(preChavezTokenProp = preChavezStemWordProportion, postChavezTokenProp = postChavezStemWordProportion, WordsORStemsORLemmas = "Stems", isKeywords = FALSE, topNWords = topXNumberOfWordsForChart)
-ggsave( paste("images/top",topXNumberOfWordsForChart,"AllStemsProp.pdf", sep=""), width = graphW, height = graphH, units = "cm" )
-ggsave( paste("images/top",topXNumberOfWordsForChart,"AllStemsProp.png", sep=""), width = graphW, height = graphH, units = "cm" )
-AllStemsProp
+# # Words #
+#
+# AllWordsProp <- plotPrePostProp(preChavezTokenProp = preChavezWordProportion, postChavezTokenProp = postChavezWordProportion, WordsORStemsORLemmas = "Words", isKeywords = FALSE, topNWords = topXNumberOfWordsForChart)
+# ggsave( paste("images/top",topXNumberOfWordsForChart,"AllWordsProp.pdf", sep=""), width = graphW, height = graphH, units = "cm" )
+# ggsave( paste("images/top",topXNumberOfWordsForChart,"AllWordsProp.png", sep=""), width = graphW, height = graphH, units = "cm" )
+# AllWordsProp
+#
+# # Stems #
+#
+#
+# AllStemsProp <- plotPrePostProp(preChavezTokenProp = preChavezStemWordProportion, postChavezTokenProp = postChavezStemWordProportion, WordsORStemsORLemmas = "Stems", isKeywords = FALSE, topNWords = topXNumberOfWordsForChart)
+# ggsave( paste("images/top",topXNumberOfWordsForChart,"AllStemsProp.pdf", sep=""), width = graphW, height = graphH, units = "cm" )
+# ggsave( paste("images/top",topXNumberOfWordsForChart,"AllStemsProp.png", sep=""), width = graphW, height = graphH, units = "cm" )
+# AllStemsProp
 
 
 
@@ -89,26 +90,27 @@ ggsave( paste("images/top",topXNumberOfWordsForChart,"AllLemmasProp.pdf", sep=""
 ggsave( paste("images/top",topXNumberOfWordsForChart,"AllLemmasProp.png", sep=""), width = graphW, height = graphH, units = "cm" )
 AllLemmasProp
 
-
+# For paper
+ggsave( paste("methodsAndMethodLitReview/images/top",topXNumberOfWordsForChart,"AllLemmasProp.pdf", sep=""), width = graphW, height = graphH, units = "cm" )
 
 #####################################
 ## Calculate Changes in the Proportions ##
 ####################################
 
-
-AllWordsPropChange <- plotChangesInProp(preChavezItemProp = preChavezWordProportion, postChavezItemProp = postChavezWordProportion, WordORStemORLemma = "Word", numberOfItems = topXNumberOfWordsForChart, isKeywords = FALSE)
-ggsave( paste("images/top",topXNumberOfWordsForChart,"AllWordsPropChange.pdf", sep=""), width = graphW, height = graphH, units = "cm" )
-ggsave( paste("images/top",topXNumberOfWordsForChart,"AllWordsPropChange.png", sep=""), width = graphW, height = graphH, units = "cm" )
-AllWordsPropChange
-
-# Stems #
-
-
-AllStemsPropChange <- plotChangesInProp(preChavezItemProp = preChavezStemWordProportion, postChavezItemProp = postChavezStemWordProportion, WordORStemORLemma = "Stem", numberOfItems = topXNumberOfWordsForChart, isKeywords = FALSE)
-ggsave( paste("images/top",topXNumberOfWordsForChart,"AllStemsPropChange.pdf", sep=""), width = graphW, height = graphH, units = "cm" )
-ggsave( paste("images/top",topXNumberOfWordsForChart,"AllStemsPropChange.png", sep=""), width = graphW, height = graphH, units = "cm" )
-AllStemsPropChange
-
+#
+# AllWordsPropChange <- plotChangesInProp(preChavezItemProp = preChavezWordProportion, postChavezItemProp = postChavezWordProportion, WordORStemORLemma = "Word", numberOfItems = topXNumberOfWordsForChart, isKeywords = FALSE)
+# ggsave( paste("images/top",topXNumberOfWordsForChart,"AllWordsPropChange.pdf", sep=""), width = graphW, height = graphH, units = "cm" )
+# ggsave( paste("images/top",topXNumberOfWordsForChart,"AllWordsPropChange.png", sep=""), width = graphW, height = graphH, units = "cm" )
+# AllWordsPropChange
+#
+# # Stems #
+#
+#
+# AllStemsPropChange <- plotChangesInProp(preChavezItemProp = preChavezStemWordProportion, postChavezItemProp = postChavezStemWordProportion, WordORStemORLemma = "Stem", numberOfItems = topXNumberOfWordsForChart, isKeywords = FALSE)
+# ggsave( paste("images/top",topXNumberOfWordsForChart,"AllStemsPropChange.pdf", sep=""), width = graphW, height = graphH, units = "cm" )
+# ggsave( paste("images/top",topXNumberOfWordsForChart,"AllStemsPropChange.png", sep=""), width = graphW, height = graphH, units = "cm" )
+# AllStemsPropChange
+#
 
 
 # Lemmas #
@@ -118,19 +120,21 @@ ggsave( paste("images/top",topXNumberOfWordsForChart,"AllLemmasPropChange.pdf", 
 ggsave( paste("images/top",topXNumberOfWordsForChart,"AllLemmasPropChange.png", sep=""), width = graphW, height = graphH, units = "cm" )
 AllLemmasPropChange
 
+# For Paper
+ggsave( paste("methodsAndMethodLitReview/images/top",topXNumberOfWordsForChart,"AllLemmasPropChange.pdf", sep=""), width = graphW, height = graphH, units = "cm" )
 
 
-AllLemmasPropChange50 <- plotChangesInProp(preChavezItemProp = preChavezLemmaProportion, postChavezItemProp = postChavezLemmaProportion, WordORStemORLemma = "Lemma", numberOfItems = 50, isKeywords = FALSE)
-ggsave( paste("images/top",50,"AllLemmasPropChange50.pdf", sep=""), width = 50, height = 50, units = "cm" )
-ggsave( paste("images/top",50,"AllLemmasPropChange50.png", sep=""), width = 50, height = 50, units = "cm" )
-AllLemmasPropChange50
-
-
-AllLemmasPropChange100 <- plotChangesInProp(preChavezItemProp = preChavezLemmaProportion, postChavezItemProp = postChavezLemmaProportion, WordORStemORLemma = "Lemma", numberOfItems = 100, isKeywords = FALSE)
-ggsave( paste("images/top",100,"AllLemmasPropChange100.pdf", sep=""), width = 60, height = 60, units = "cm" )
-ggsave( paste("images/top",100,"AllLemmasPropChange100.png", sep=""), width = 60, height = 60, units = "cm" )
-AllLemmasPropChange100
-
+# AllLemmasPropChange50 <- plotChangesInProp(preChavezItemProp = preChavezLemmaProportion, postChavezItemProp = postChavezLemmaProportion, WordORStemORLemma = "Lemma", numberOfItems = 50, isKeywords = FALSE)
+# ggsave( paste("images/top",50,"AllLemmasPropChange50.pdf", sep=""), width = 50, height = 50, units = "cm" )
+# ggsave( paste("images/top",50,"AllLemmasPropChange50.png", sep=""), width = 50, height = 50, units = "cm" )
+# AllLemmasPropChange50
+#
+#
+# AllLemmasPropChange100 <- plotChangesInProp(preChavezItemProp = preChavezLemmaProportion, postChavezItemProp = postChavezLemmaProportion, WordORStemORLemma = "Lemma", numberOfItems = 100, isKeywords = FALSE)
+# ggsave( paste("images/top",100,"AllLemmasPropChange100.pdf", sep=""), width = 60, height = 60, units = "cm" )
+# ggsave( paste("images/top",100,"AllLemmasPropChange100.png", sep=""), width = 60, height = 60, units = "cm" )
+# AllLemmasPropChange100
+#
 
 
 ##########################################################################
@@ -153,22 +157,22 @@ postChavezKeywordLemmaProportion <- getProp(tokenTable = postChavezPdfTokens, wh
 
 
 
-
-# Words #
-
-KeywordWordsProp <- plotPrePostProp(preChavezTokenProp = preChavezKeywordWordProportion, postChavezTokenProp = postChavezKeywordWordProportion, WordsORStemsORLemmas = "Words", isKeywords = TRUE, topNWords = topXNumberOfWordsForChart)
-ggsave( paste("images/top",topXNumberOfWordsForChart,"KeywordWordsProp.pdf", sep=""), width = graphW, height = graphH, units = "cm" )
-ggsave( paste("images/top",topXNumberOfWordsForChart,"KeywordWordsProp.png", sep=""), width = graphW, height = graphH, units = "cm" )
-KeywordWordsProp
-
-# Stems #
-
-
-KeywordStemsProp <- plotPrePostProp(preChavezTokenProp = preChavezKeywordStemWordProportion, postChavezTokenProp = postChavezKeywordStemWordProportion, WordsORStemsORLemmas = "Stems", isKeywords = TRUE, topNWords = topXNumberOfWordsForChart)
-ggsave( paste("images/top",topXNumberOfWordsForChart,"KeywordStemsProp.pdf", sep=""), width = graphW, height = graphH, units = "cm" )
-ggsave( paste("images/top",topXNumberOfWordsForChart,"KeywordStemsProp.png", sep=""), width = graphW, height = graphH, units = "cm" )
-KeywordStemsProp
-
+#
+# # Words #
+#
+# KeywordWordsProp <- plotPrePostProp(preChavezTokenProp = preChavezKeywordWordProportion, postChavezTokenProp = postChavezKeywordWordProportion, WordsORStemsORLemmas = "Words", isKeywords = TRUE, topNWords = topXNumberOfWordsForChart)
+# ggsave( paste("images/top",topXNumberOfWordsForChart,"KeywordWordsProp.pdf", sep=""), width = graphW, height = graphH, units = "cm" )
+# ggsave( paste("images/top",topXNumberOfWordsForChart,"KeywordWordsProp.png", sep=""), width = graphW, height = graphH, units = "cm" )
+# KeywordWordsProp
+#
+# # Stems #
+#
+#
+# KeywordStemsProp <- plotPrePostProp(preChavezTokenProp = preChavezKeywordStemWordProportion, postChavezTokenProp = postChavezKeywordStemWordProportion, WordsORStemsORLemmas = "Stems", isKeywords = TRUE, topNWords = topXNumberOfWordsForChart)
+# ggsave( paste("images/top",topXNumberOfWordsForChart,"KeywordStemsProp.pdf", sep=""), width = graphW, height = graphH, units = "cm" )
+# ggsave( paste("images/top",topXNumberOfWordsForChart,"KeywordStemsProp.png", sep=""), width = graphW, height = graphH, units = "cm" )
+# KeywordStemsProp
+#
 
 
 # Lemmas #
@@ -178,22 +182,27 @@ ggsave( paste("images/top",topXNumberOfWordsForChart,"KeywordLemmasProp.pdf", se
 ggsave( paste("images/top",topXNumberOfWordsForChart,"KeywordLemmasProp.png", sep=""), width = graphW, height = graphH, units = "cm" )
 KeywordLemmasProp
 
+# For Paper
+ggsave( paste("methodsAndMethodLitReview/images/top",topXNumberOfWordsForChart,"KeywordLemmasProp.pdf", sep=""), width = graphW, height = graphH, units = "cm" )
+
+
+
 ########################################
 ### Proportion Changes with Keywords ###
 ##########################################
-
-KeywordsWordsPropChange <- plotChangesInProp(preChavezItemProp = preChavezKeywordWordProportion, postChavezItemProp = postChavezKeywordWordProportion, WordORStemORLemma = "Word", numberOfItems = topXNumberOfWordsForChart, isKeywords = FALSE)
-ggsave( paste("images/top",topXNumberOfWordsForChart,"KeywordsWordsPropChange.pdf", sep=""), width = graphW, height = graphH, units = "cm" )
-ggsave( paste("images/top",topXNumberOfWordsForChart,"KeywordsWordsPropChange.png", sep=""), width = graphW, height = graphH, units = "cm" )
-KeywordsWordsPropChange
-
-# Stems #
-
-
-KeywordsStemsPropChange <- plotChangesInProp(preChavezItemProp = preChavezKeywordStemWordProportion, postChavezItemProp = postChavezKeywordStemWordProportion, WordORStemORLemma = "Stem", numberOfItems = topXNumberOfWordsForChart, isKeywords = FALSE)
-ggsave( paste("images/top",topXNumberOfWordsForChart,"KeywordsStemsPropChange.pdf", sep=""), width = graphW, height = graphH, units = "cm" )
-ggsave( paste("images/top",topXNumberOfWordsForChart,"KeywordsStemsPropChange.png", sep=""), width = graphW, height = graphH, units = "cm" )
-KeywordsStemsPropChange
+#
+# KeywordsWordsPropChange <- plotChangesInProp(preChavezItemProp = preChavezKeywordWordProportion, postChavezItemProp = postChavezKeywordWordProportion, WordORStemORLemma = "Word", numberOfItems = topXNumberOfWordsForChart, isKeywords = FALSE)
+# ggsave( paste("images/top",topXNumberOfWordsForChart,"KeywordsWordsPropChange.pdf", sep=""), width = graphW, height = graphH, units = "cm" )
+# ggsave( paste("images/top",topXNumberOfWordsForChart,"KeywordsWordsPropChange.png", sep=""), width = graphW, height = graphH, units = "cm" )
+# KeywordsWordsPropChange
+#
+# # Stems #
+#
+#
+# KeywordsStemsPropChange <- plotChangesInProp(preChavezItemProp = preChavezKeywordStemWordProportion, postChavezItemProp = postChavezKeywordStemWordProportion, WordORStemORLemma = "Stem", numberOfItems = topXNumberOfWordsForChart, isKeywords = FALSE)
+# ggsave( paste("images/top",topXNumberOfWordsForChart,"KeywordsStemsPropChange.pdf", sep=""), width = graphW, height = graphH, units = "cm" )
+# ggsave( paste("images/top",topXNumberOfWordsForChart,"KeywordsStemsPropChange.png", sep=""), width = graphW, height = graphH, units = "cm" )
+# KeywordsStemsPropChange
 
 
 
@@ -204,6 +213,8 @@ ggsave( paste("images/top",topXNumberOfWordsForChart,"KeywordsLemmasPropChange.p
 ggsave( paste("images/top",topXNumberOfWordsForChart,"KeywordsLemmasPropChange.png", sep=""), width = graphW, height = graphH, units = "cm" )
 KeywordsLemmasPropChange
 
+# For Paper
 
+ggsave( paste("methodsAndMethodLitReview/images/top",topXNumberOfWordsForChart,"KeywordsLemmasPropChange.pdf", sep=""), width = graphW, height = graphH, units = "cm" )
 
 

@@ -51,10 +51,11 @@ outPlot <- ggplot(combinedProp, aes(theTerm, theProp, fill = theDocumentSet))
 outPlot <- outPlot + geom_col(show.legend = FALSE)
 outPlot <- outPlot + scale_x_reordered()
 outPlot <- outPlot + coord_flip()
+outPlot <- outPlot + theme(axis.text.x = element_text(angle=45, hjust=1))
 outPlot <- outPlot + facet_wrap("theDocumentSet", scales = "free_y")
 outPlot <- outPlot + labs(x = "",
          y = "",
-         title = paste("Proportions for the Top",topNWords,WordsORStemsORLemmas, "for Each Set of Textbooks", sep=" ") )
+         title = paste("Proportions for the Top",topNWords,WordsORStemsORLemmas, "\nfor Each Set of Textbooks", sep=" ") )
 
   outPlot
 }

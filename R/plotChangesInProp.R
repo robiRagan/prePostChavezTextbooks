@@ -61,7 +61,9 @@ plotChangesInProp <- function(preChavezItemProp, postChavezItemProp, WordORStemO
   outPlot <- outPlot + coord_flip()
   outPlot <- outPlot + ylab( paste("Top", numberOfItems, "Positive and Top", numberOfItems,"Negative Changes in",WordORStemORLemma,"Proportion", sep=" ") )
   outPlot <- outPlot + xlab("")
+  outPlot <- outPlot + theme(axis.text.x = element_text(angle=45, hjust=1))
   outPlot <- outPlot + scale_fill_manual(values = customPal)
+  outPlot <- outPlot + labs(x = "", y = "", title = paste("Top", numberOfItems, "Positive and Top", numberOfItems,"Negative Changes in",WordORStemORLemma,"Proportion", sep=" ") )
   outPlot
 }
 

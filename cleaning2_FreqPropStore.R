@@ -285,6 +285,8 @@ postChavezPdfTokens <- left_join(x = postChavezPdfTokens, y = AllTokensAndKeywor
 keywordMasterList <- left_join(x = keywordMasterList, y = AllTokensAndKeywordsLemmas, by="stem")
 
 
+
+
 # filter(preChavezPdfTokens, word=="injusta" | word=="injustamente" | word=="injusto" | word=="injusticia" | word=="injustas" | word=="injusticias")
 # filter(postChavezPdfTokens, word=="injusta" | word=="injustamente" | word=="injusto" | word=="injusticia" | word=="injustas" | word=="injusticias")
 # filter(keywordMasterList, word=="injusta" | word=="injustamente" | word=="injusto" | word=="injusticia" | word=="injustas" | word=="injusticias")
@@ -344,7 +346,10 @@ postChavezPdfTokens <- left_join(x = postChavezPdfTokens, y = postChavezLemmaFre
 # arrange(postChavezPdfTokens, lemmaCount)
 
 
-# Make sure that the lemma count and stem count are the same if using not custom lemmas
+
+
+
+# Make sure that the lemma count and stem count are the same if using no custom lemmas
 sum(preChavezPdfTokens$stemCount - preChavezPdfTokens$lemmaCount) # Should == 0
 sum(postChavezPdfTokens$stemCount - postChavezPdfTokens$lemmaCount) # Should == 0
 
@@ -584,7 +589,11 @@ print( filter(preChavezPdfTokens, word=="repartición" | word=="distribución"),
 print( filter(postChavezPdfTokens, word=="repartición" | word=="distribución"), n=Inf )
 print( filter(combinedUniqueTokens, word=="repartición" | word=="distribución"), n=Inf )
 
+print( filter(combinedUniqueTokens, stem=="boliv"), n=Inf )
+
+
 print( filter(keywordMasterList, word=="repartición" | word=="distribución"), n=Inf )
+
 
 
 print( filter(preUniqueWords, lemma=="repartición" | lemma=="distribución"), n=Inf )
@@ -612,6 +621,10 @@ print( filter(combinedUniqueTokens,  word=="injusticia" | word=="injusticias"), 
 print( filter(keywordMasterList, word=="injusticia" | word=="injusticias"), n=Inf )
 
 
+print( arrange(combinedUniqueTokens, desc(wordCount)), n=30)
+
+
+
 # Lemma distribución
 
 
@@ -627,6 +640,11 @@ print( filter(keywordMasterList, word=="injusticia" | word=="injusticias"), n=In
 # filter(postChavezPdfTokens, lemma=="ciudades" | lemma=="ciudad")
 # filter(keywordMasterList, lemma=="ciudades" | lemma=="ciudad")
 
+
+
+### If any keyword lemmas were lost in teh join replace them with the correct word.
+
+keywordMasterList$lemma <- ifelse(is.na(keywordMasterList$lemma), keywordMasterList$word, keywordMasterList$lemma)
 
 
 # Write out

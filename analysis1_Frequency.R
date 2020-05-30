@@ -31,12 +31,15 @@ postChavezPdfTokens <- read_csv(file = "tokenizedText/postChavezPdfTokenTable.cs
 
 keywordMasterList <- read_csv(file = "tokenizedText/keywordMasterListTable.csv")
 
+
+
+
 ########################################
 # Graphing Parameters
 #####################################
-graphW <- 40
+graphW <- 20
 
-graphH <- 30
+graphH <- 15
 
 topXNumberOfWordsForChart <- 10
 
@@ -53,6 +56,14 @@ postChavezStemWordFrequency <- getFreq(tokenTable = postChavezPdfTokens, whichFr
 
 preChavezLemmaFrequency <- getFreq(tokenTable = preChavezPdfTokens, whichFreq = "lemma", onlyKeywords = FALSE, theKeywordMasterList = NA)
 postChavezLemmaFrequency <- getFreq(tokenTable = postChavezPdfTokens, whichFreq = "lemma", onlyKeywords = FALSE, theKeywordMasterList = NA)
+
+numberOfUniquePreChavezLemmas <- nrow(preChavezLemmaFrequency)
+numberOfUniquePostChavezLemmas <- nrow(postChavezLemmaFrequency)
+
+
+totalPreChavezLemmaFrequency <- sum(preChavezLemmaFrequency$lemmaCount)
+totalPostChavezLemmaFrequency <- sum(postChavezLemmaFrequency$lemmaCount)
+
 
 
 # We can construct a chart that displays all of the words that appear more than X number of times.
@@ -89,6 +100,15 @@ ggsave( paste("images/top",topXNumberOfWordsForChart,"AllLemmasFreq.png", sep=""
 AllLemmasFreq
 
 
+# All lemmas Not just Top X#
+
+AllLemmasFreq <- plotPrePostFreq(preChavezTokenFrequency = preChavezLemmaFrequency, postChavezTokenFrequency = postChavezLemmaFrequency, WordsORStemsORLemmas = "Lemmas", isKeywords = FALSE, topNWords = topXNumberOfWordsForChart)
+ggsave( paste("images/AllLemmasFreq.pdf", sep=""), width = graphW, height = graphH, units = "cm" )
+ggsave( paste("images/AllLemmasFreq.png", sep=""), width = graphW, height = graphH, units = "cm" )
+AllLemmasFreq
+
+
+
 
 ##########################################################################
 ##########################################################################
@@ -108,6 +128,22 @@ postChavezKeywordStemWordFrequency <- getFreq(tokenTable = postChavezPdfTokens, 
 preChavezKeywordLemmaFrequency <- getFreq(tokenTable = preChavezPdfTokens, whichFreq = "lemma", onlyKeywords = TRUE, theKeywordMasterList = keywordMasterList)
 postChavezKeywordLemmaFrequency <- getFreq(tokenTable = postChavezPdfTokens, whichFreq = "lemma", onlyKeywords = TRUE, theKeywordMasterList = keywordMasterList)
 
+numberOfUniquePreChavezKeywordLemmas <- nrow(preChavezKeywordLemmaFrequency)
+numberOfUniquePostChavezKeywordLemmas <- nrow(postChavezKeywordLemmaFrequency)
+
+
+totalPreChavezKeywordLemmaFrequency <- sum(preChavezKeywordLemmaFrequency$lemmaCount)
+totalPostChavezKeywordLemmaFrequency <- sum(postChavezKeywordLemmaFrequency$lemmaCount)
+
+uniqueKeywordLemmasInPre <- preChavezKeywordLemmaFrequency$lemma
+
+uniqueKeywordLemmasInPost <- postChavezKeywordLemmaFrequency$lemma
+
+keywordLemmas <- keywordMasterList$lemma
+
+allKeyWordLemmasInPreAndPost <- unique(uniqueKeywordLemmasInPre, uniqueKeywordLemmasInPost)
+
+keywordLemmasNotInEitherSet <- setdiff(keywordLemmas, allKeyWordLemmasInPreAndPost)
 
 
 
